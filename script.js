@@ -113,12 +113,14 @@ const allSongs = [
 
 
 //function to update display info or not
-
+function displayInfo(song){
+    songTitle.innerText = song.title;
+    songArtist.innerText = song.artist;
+}
 
 //function play 
 // user find() : return true
-function playSong(id){
-    console.log(id);
+function playSong(id){    
     //console.log(audio.src, audio.title);
     const song = userData?.songs.find((song) => song.id === id)
     console.log(song);
@@ -129,8 +131,9 @@ function playSong(id){
         audio.currentTime = 0;
     } else {
         audio.currentTime = userData.songCurrentTime        
-    }    
-    console.log(audio.src, audio.title);
+    }  
+    //console.log(audio.src, audio.title);
+    displayInfo(song)
     audio.play()
 }
 
