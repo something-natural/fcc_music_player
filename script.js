@@ -117,10 +117,12 @@ const allSongs = [
 
 //function play 
 // user find() : return true
-function playSong(id){      
-    console.log(audio.src, audio.title);
+function playSong(id){
+    console.log(id);
+    //console.log(audio.src, audio.title);
     const song = userData?.songs.find((song) => song.id === id)
-    if ( userData?.currentSong === null){
+    console.log(song);
+    if ( userData?.currentSong === null || userData?.currentSong.id !== id){
         userData.currentSong = song;
         audio.src = song.src;
         audio.title = song.title;        
@@ -128,7 +130,7 @@ function playSong(id){
     } else {
         audio.currentTime = userData.songCurrentTime        
     }    
-    //console.log(audio.src, audio.title);
+    console.log(audio.src, audio.title);
     audio.play()
 }
 
@@ -166,7 +168,7 @@ function renderPlayList(array){
     const html = array.map((song) => {
         return `
         <li id="song-${song.id}" class="playlist-song">            
-            <button class="playlist-song-info">
+            <button class="playlist-song-info" onclick="playSong(${song.id})">
                 <span class="playlist-song-title">${song.title}</span>
                 <span class="playlist-song-artist">${song.artist}</span>
                 <span class="playlist-song-duration">${song.duration}</span>
