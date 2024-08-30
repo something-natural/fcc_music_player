@@ -147,10 +147,25 @@ function playSong(id){
     audio.play()
 }
 
+//function pause
 function pauseSong(){
     userData.songCurrentTime = audio.currentTime;
     audio.pause();
 }
+
+//function to play previous or next song
+function backAndForth(direction){
+    const index = userData?.songs.indexOf(userData.currentSong)
+    const length = userData?.songs.length
+    if ( direction === 'prev'){
+        index === 0 ? playSong(userData?.songs[length - 1].id)
+        :playSong(userData?.songs[index -1].id)
+    } else {
+        index === length - 1 ? playSong(userData?.songs[0].id)
+        :playSong(userData?.songs[index + 1].id)
+    }
+}
+
 
 //function to render
 function renderPlayList(array){
@@ -196,7 +211,9 @@ play.addEventListener("click", () => {
         playSong(userData?.currentSong.id)
     }
 });
-pause.addEventListener("click",pauseSong)
+pause.addEventListener("click", pauseSong);
+previous.addEventListener("click", function(){backAndForth('prev')});
+next.addEventListener("click", function(){backAndForth('next')});
 shuffle.addEventListener("click", shuffleList);
 
 //init
