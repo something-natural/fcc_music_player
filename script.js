@@ -141,7 +141,7 @@ function playSong(id){
         audio.title = song.title;        
         audio.currentTime = 0;
     } else {
-        audio.currentTime = userData.songCurrentTime        
+        audio.currentTime = userData.songCurrentTime;
     }      
     displayInfo(song)
     audio.play()
@@ -160,12 +160,20 @@ function backAndForth(direction){
     if ( direction === 'prev'){
         index === 0 ? playSong(userData?.songs[length - 1].id)
         :playSong(userData?.songs[index -1].id)
-    } else {
+    } else if( direction === 'next') {
         index === length - 1 ? playSong(userData?.songs[0].id)
         :playSong(userData?.songs[index + 1].id)
+    } else {
+        if (index === length - 1) {
+            userData.currentSong = null;
+            userData.songCurrentTime = 0;
+            songTitle.innerText = "";
+            songArtist.innerText = "";
+        } else {
+            playSong(userData?.songs[index + 1].id)            
+        }             
     }
 }
-
 
 //function to render
 function renderPlayList(array){
@@ -189,11 +197,12 @@ function renderPlayList(array){
     playList.innerHTML = html;
 }
 
+
 //function to deleteSongs : you need song id
 // use filter() : return true
 function delSong(id){
     userData.songs = userData?.songs.filter((song) => song.id !== id);
-    renderPlayList(userData?.songs);
+    renderPlayList(userData?.songs);    
 };
 
 //function to shuffle
@@ -215,6 +224,7 @@ pause.addEventListener("click", pauseSong);
 previous.addEventListener("click", function(){backAndForth('prev')});
 next.addEventListener("click", function(){backAndForth('next')});
 shuffle.addEventListener("click", shuffleList);
+audio.addEventListener("ended",function(){backAndForth('ended')})
 
 //init
 renderPlayList(sortSongs());
