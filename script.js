@@ -98,7 +98,7 @@ const allSongs = [
       artist: "Quincy Larson",
       duration: "2:43",
       src: "https://cdn.freecodecamp.org/curriculum/js-music-player/chasing-that-feeling.mp3",
-    },
+    }
   ];
   
   // audio
@@ -112,8 +112,25 @@ const allSongs = [
   }
 
 
+//function to update display info or not
 
 
+//function play 
+// user find() : return true
+function playSong(id){      
+    console.log(audio.src, audio.title);
+    const song = userData?.songs.find((song) => song.id === id)
+    if ( userData?.currentSong === null){
+        userData.currentSong = song;
+        audio.src = song.src;
+        audio.title = song.title;        
+        audio.currentTime = 0;
+    } else {
+        audio.currentTime = userData.songCurrentTime        
+    }    
+    //console.log(audio.src, audio.title);
+    audio.play()
+}
 
 /* playList functions
 you should deal with
@@ -166,13 +183,27 @@ function renderPlayList(array){
 }
 
 //function to deleteSongs : you need song id
+// use filter() : return true
 function delSong(id){
     userData.songs = userData?.songs.filter((song) => song.id !== id);        
     renderPlayList(userData?.songs);
 };
 
 //function to shuffle
+function shuffleList(array){    
+    userData?.songs.sort(() => Math.random() - 0.5) 
+    renderPlayList(userData?.songs);
+}
 
 
+//init
+play.addEventListener("click", () => {
+    if (userData.currentSong === null ){
+        playSong(userData?.songs[0].id)        
+    } else {
+        playSong(userData?.currentSong.id)
+    }
+});
+shuffle.addEventListener("click", shuffleList);
 renderPlayList(sortSongs());
 
