@@ -101,56 +101,7 @@ const allSongs = [
     }
   ];
   
-  // audio
-  const audio = new Audio();
-  
-  // userData to manipulate
-  let userData = {
-    songs: [...allSongs],
-    currentSong: null,
-    songCurrentTime: 0
-  }
-
-
-//function to update display info or not
-function displayInfo(song){
-    songTitle.innerText = song.title;
-    songArtist.innerText = song.artist;
-}
-
-//function play 
-// user find() : return true
-function playSong(id){    
-    //console.log(audio.src, audio.title);
-    const song = userData?.songs.find((song) => song.id === id)
-    console.log(song);
-    if ( userData?.currentSong === null || userData?.currentSong.id !== id){
-        userData.currentSong = song;
-        audio.src = song.src;
-        audio.title = song.title;        
-        audio.currentTime = 0;
-    } else {
-        audio.currentTime = userData.songCurrentTime        
-    }  
-    //console.log(audio.src, audio.title);
-    displayInfo(song)
-    audio.play()
-}
-
-/* playList functions
-you should deal with
-class = playlist-song
-class = playlist-song-info
-class = playlist-song-title
-class = playlist-song-artist
-class = playlist-song-duration
-class = playlist-song-delete
-aria-current = "true" or "false"
-id = player-song-title
-id = player-song-artist
-*/
-
-//function to sort songs
+ //function to sort songs
 function sortSongs(array){
     userData?.songs.sort( (a,b) => {
         if (a.title < b.title){
@@ -164,10 +115,47 @@ function sortSongs(array){
     return userData?.songs;
 }
 
+// audio
+const audio = new Audio();
+
+// userData to manipulate
+let userData = {
+songs: [...allSongs],
+currentSong: null,
+songCurrentTime: 0
+}
+
+//function to update display info or not
+function displayInfo(song){
+    songTitle.innerText = song.title;
+    songArtist.innerText = song.artist;
+}
+
+//function play : find() is the key
+function playSong(id){        
+    const song = userData?.songs.find((song) => song.id === id)    
+    //update whole audio properties if currentSong is null of currentsong id is different from arg id
+    if ( userData?.currentSong === null || userData?.currentSong.id !== id){
+        userData.currentSong = song;
+        audio.src = song.src;
+        audio.title = song.title;        
+        audio.currentTime = 0;
+    } else {
+        audio.currentTime = userData.songCurrentTime        
+    }      
+    displayInfo(song)
+    audio.play()
+}
+
+function pauseSong(){
+    userData.songCurrentTime = audio.currentTime;
+    audio.pause();
+}
+
 //function to render
 function renderPlayList(array){
     // renter song info to li and two buttons
-    // you should use join() to 
+    // you should use join("") to remove "," between tags
     const html = array.map((song) => {
         return `
         <li id="song-${song.id}" class="playlist-song">            
@@ -182,15 +170,14 @@ function renderPlayList(array){
                     <path fill-rule="evenodd" clip-rule="evenodd" d="M5.32587 5.18571C5.7107 4.90301 6.28333 4.94814 6.60485 5.28651L8 6.75478L9.39515 5.28651C9.71667 4.94814 10.2893 4.90301 10.6741 5.18571C11.059 5.4684 11.1103 5.97188 10.7888 6.31026L9.1832 7.99999L10.7888 9.68974C11.1103 10.0281 11.059 10.5316 10.6741 10.8143C10.2893 11.097 9.71667 11.0519 9.39515 10.7135L8 9.24521L6.60485 10.7135C6.28333 11.0519 5.7107 11.097 5.32587 10.8143C4.94102 10.5316 4.88969 10.0281 5.21121 9.68974L6.8168 7.99999L5.21122 6.31026C4.8897 5.97188 4.94102 5.4684 5.32587 5.18571Z" fill="white"/>
                 </svg>
             </button>
-        </li>`;}).join("")
-    //console.log(html);
+        </li>`;}).join("")    
     playList.innerHTML = html;
 }
 
 //function to deleteSongs : you need song id
 // use filter() : return true
 function delSong(id){
-    userData.songs = userData?.songs.filter((song) => song.id !== id);        
+    userData.songs = userData?.songs.filter((song) => song.id !== id);
     renderPlayList(userData?.songs);
 };
 
@@ -201,7 +188,7 @@ function shuffleList(array){
 }
 
 
-//init
+//event listeners
 play.addEventListener("click", () => {
     if (userData.currentSong === null ){
         playSong(userData?.songs[0].id)        
@@ -209,6 +196,9 @@ play.addEventListener("click", () => {
         playSong(userData?.currentSong.id)
     }
 });
+pause.addEventListener("click",pauseSong)
 shuffle.addEventListener("click", shuffleList);
+
+//init
 renderPlayList(sortSongs());
 
