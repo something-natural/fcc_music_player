@@ -1,4 +1,11 @@
 /*
+how to work
+1. first sort song array and render it to playlist
+2. display info of first song on the list in player-display div
+3. play, pause, previous, next, shuffle with buttons
+4. use map() sort() and ?
+
+todos
 1. make vars for all buttons
 2. create song arrays
 3. make html5 audio objects
@@ -104,3 +111,41 @@ const allSongs = [
     songCurrentTime: 0
   }
 
+
+/* playList function
+you should deal with
+class = playlist-song
+class = playlist-song-info
+class = playlist-song-title
+class = playlist-song-artist
+class = playlist-song-duration
+class = playlist-song-delete
+aria-current = "true" or "false"
+id = player-song-title
+id = player-song-artist
+
+
+*/
+function getPlayList(){
+    const html = `
+    <button class = playlist-song-delete></button>
+    `
+    playList.innerHTML = html;
+}
+
+
+//function to sort songs
+function sortSongs(array){
+    array.sort( (a,b) => {
+        if (a.title < b.title){
+            return -1;
+        }
+        if (a.title > b.title){
+            return 1;
+        }
+        return 0;
+    }
+    ) 
+}
+
+sortSongs(userData.songs);
