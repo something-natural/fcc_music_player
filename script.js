@@ -131,6 +131,18 @@ function displayInfo(song){
     songArtist.innerText = song.artist;
 }
 
+function highlight(id){
+    const liList = document.querySelectorAll(".playlist-song")
+    liList.forEach((li) => {
+        li.removeAttribute("aria-current")
+    })
+    const test = document.getElementById(`song-${id}`);
+    test.setAttribute("aria-current", "true")
+    //console.log(liList);
+    //console.log(test);
+
+}
+
 //function play : find() is the key
 function playSong(id){        
     const song = userData?.songs.find((song) => song.id === id)    
@@ -143,13 +155,16 @@ function playSong(id){
     } else {
         audio.currentTime = userData.songCurrentTime;
     }      
-    displayInfo(song)
-    audio.play()
+    displayInfo(song);
+    highlight(id);
+    play.classList.add("playing");
+    audio.play();
 }
 
 //function pause
 function pauseSong(){
     userData.songCurrentTime = audio.currentTime;
+    play.classList.remove("playing");
     audio.pause();
 }
 
